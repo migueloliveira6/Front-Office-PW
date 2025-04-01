@@ -111,7 +111,7 @@
       </section>
       <!-- Footer -->
       <footer>
-        <p>© 2025 EyesEverywhere. All rights reserved.</p>
+        <Footer />
       </footer>
     </div>
 </template>
@@ -119,12 +119,14 @@
 <script>
   import Header from './Header.vue';
   import maptraffic from './maptraffic.vue';
+  import Footer from './Footer.vue';
   
   export default {
     name: "Home",
     components: {
       Header,
       maptraffic,
+      Footer,
     },
   };
 </script>
