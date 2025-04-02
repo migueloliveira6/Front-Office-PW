@@ -30,7 +30,6 @@
           </b-button>
         </router-link>
       </div>
-      <b-button class="nav-button app-button">Get the App ⬇</b-button>
     </nav>
 
     <!-- Texto Principal -->

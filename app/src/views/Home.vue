@@ -64,7 +64,7 @@
           <b-col cols="6" md="3" class="mb-4">
             <div class="metric-card">
               <h4>Satisfação dos cidadãos</h4>
-              <p class="metric-value">Bom</p>
+              <p class="metric-value">Excelente</p>
             </div>
           </b-col>
         </b-row>
@@ -223,7 +223,7 @@ h4 {
 }
 
 .alert-icon {
-  width: 150px; /* Ajusta o tamanho da imagem */
+  width: 110px; /* Ajusta o tamanho da imagem */
   height: auto;
   margin-right: 25px;
 }
