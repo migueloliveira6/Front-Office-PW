@@ -1,137 +1,309 @@
 <template>
-    <div id="home">
-      <Header />
-      <!-- Sobre Nós -->
-      <section class="about-section">
-        <h1 class="text-center mb-5">Sobre Nós</h1>
+  <div id="home">
+    <Header />
+    <!-- Sobre Nós -->
+    <section class="about-section">
+      <h1 class="text-center mb-5">Sobre Nós</h1>
+      
+      <b-row class="justify-content-center">
+        <!-- Coluna 1 -->
+        <b-col cols="12" md="4" class="mb-4">
+          <div class="feature-card">
+            <h3>Monitorização em Tempo Real</h3>
+            <p>Monitorize trânsito, transportes públicos e estacionamento indevido</p>
+          </div>
+        </b-col>
         
-        <b-row class="justify-content-center">
-          <!-- Coluna 1 -->
-          <b-col cols="12" md="4" class="mb-4">
-            <div class="feature-card">
-              <h3>Monitorização em Tempo Real</h3>
-              <p>Monitorize trânsito, transportes públicos e estacionamento indevido</p>
+        <!-- Coluna 2 -->
+        <b-col cols="12" md="4" class="mb-4">
+          <div class="feature-card">
+            <h3>Dados e Auditorias</h3>
+            <p>Consulte e compare ocorrências e auditorias sobre mobilidade urbana. Desde transportes atrasados a veículos mal estacionados, etc.</p>
+          </div>
+        </b-col>
+        
+        <!-- Coluna 3 -->
+        <b-col cols="12" md="4" class="mb-4">
+          <div class="feature-card">
+            <h3>Registe e Resolva</h3>
+            <p>Registe problemas e acompanhe soluções para uma mobilidade mais eficiente</p>
+          </div>
+        </b-col>
+      </b-row>
+    </section>
+    
+    <!-- Principais Indicadores da EyesEverywhere -->
+    <section class="metrics-section">
+      <h2 class="text-center mb-5">Principais Indicadores da EyesEverywhere</h2>
+      
+      <b-row class="justify-content-center">
+        <!-- Coluna 1 -->
+        <b-col cols="6" md="3" class="mb-4">
+          <div class="metric-card">
+            <h4>Número de auditorias realizadas</h4>
+            <p class="metric-value">55</p>
+          </div>
+        </b-col>
+        
+        <!-- Coluna 2 -->
+        <b-col cols="6" md="3" class="mb-4">
+          <div class="metric-card">
+            <h4>Ocorrências registadas e resolvidas</h4>
+            <p class="metric-value">45</p>
+          </div>
+        </b-col>
+        
+        <!-- Coluna 3 -->
+        <b-col cols="6" md="3" class="mb-4">
+          <div class="metric-card">
+            <h4>Tempo médio de resposta</h4>
+            <p class="metric-value">30min</p>
+          </div>
+        </b-col>
+        
+        <!-- Coluna 4 -->
+        <b-col cols="6" md="3" class="mb-4">
+          <div class="metric-card">
+            <h4>Satisfação dos cidadãos</h4>
+            <p class="metric-value">Excelente</p>
+          </div>
+        </b-col>
+      </b-row>
+    </section>
+    
+    <!-- Seção de Ocorrências com Mapa Interativo -->
+    <section class="occurrences-section py-5">
+      <b-container>
+        <b-row class="align-items-top" align-h="between">
+          <!-- Coluna da Esquerda - Estatísticas -->
+          <b-col md="4" class="mb-4 mb-md-0">
+            <h2 class="mb-4 font-weight-bold">Ocorrências</h2>
+
+            <div class="d-flex align-items-center mb-4">
+              <img src="@/assets/perigo.png" alt="Alerta" class="alert-icon mr-3" />
+              <span class="display-1 font-weight-bold" style="font-size: 7rem;">{{ totalOccurrences }}</span>
+            </div>
+
+            <div class="d-flex flex-column gap-4 status-cards mt-9">
+              <div class="status-card open d-flex justify-content-between px-4 py-2">
+                <span>Abertas</span>
+                <span>{{ openOccurrences }}</span>
+              </div>
+              <div class="status-card analysis d-flex justify-content-between px-4 py-2">
+                <span>Em Análise</span>
+                <span>{{ analysisOccurrences }}</span>
+              </div>
+              <div class="status-card closed d-flex justify-content-between px-4 py-2">
+                <span>Concluídas</span>
+                <span>{{ closedOccurrences }}</span>
+              </div>
             </div>
           </b-col>
-          
-          <!-- Coluna 2 -->
-          <b-col cols="12" md="4" class="mb-4">
-            <div class="feature-card">
-              <h3>Dados e Auditorias</h3>
-              <p>Consulte e compare ocorrências e auditorias sobre mobilidade urbana. Desde transportes atrasados a veículos mal estacionados, etc.</p>
-            </div>
-          </b-col>
-          
-          <!-- Coluna 3 -->
-          <b-col cols="12" md="4" class="mb-4">
-            <div class="feature-card">
-              <h3>Registe e Resolva</h3>
-              <p>Registe problemas e acompanhe soluções para uma mobilidade mais eficiente</p>
+
+          <!-- Coluna do Mapa Interativo -->
+          <b-col md="7" class="text-center">
+            <div class="map-container">
+              <!-- Mapa Google Maps interativo -->
+              <div ref="map" class="interactive-map"></div>
+              
+              <!-- Controles do Mapa -->
+              <div class="map-controls">
+                <button class="control-btn zoom-btn" @click="zoomIn" title="Aproximar">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Ícone de "+" (linha vertical + linha horizontal) -->
+                    <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <button class="control-btn zoom-btn" @click="zoomOut" title="Afastar">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Ícone de "-" (apenas linha horizontal) -->
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </b-col>
         </b-row>
-      </section>
-       <!-- Principais Indicadores da EyesEverywhere -->
-      <section class="metrics-section">
-        <h2 class="text-center mb-5">Principais Indicadores da EyesEverywhere</h2>
-        
-        <b-row class="justify-content-center">
-          <!-- Coluna 1 -->
-          <b-col cols="6" md="3" class="mb-4">
-            <div class="metric-card">
-              <h4>Número de auditorias realizadas</h4>
-              <p class="metric-value">55</p>
-            </div>
-          </b-col>
-          
-          <!-- Coluna 2 -->
-          <b-col cols="6" md="3" class="mb-4">
-            <div class="metric-card">
-              <h4>Ocorrências registadas e resolvidas</h4>
-              <p class="metric-value">45</p>
-            </div>
-          </b-col>
-          
-          <!-- Coluna 3 -->
-          <b-col cols="6" md="3" class="mb-4">
-            <div class="metric-card">
-              <h4>Tempo médio de resposta</h4>
-              <p class="metric-value">30min</p>
-            </div>
-          </b-col>
-          
-          <!-- Coluna 4 -->
-          <b-col cols="6" md="3" class="mb-4">
-            <div class="metric-card">
-              <h4>Satisfação dos cidadãos</h4>
-              <p class="metric-value">Excelente</p>
-            </div>
-          </b-col>
-        </b-row>
-      </section>
-      <!-- ocorrencias -->
-      <section class="occurrences-section py-5">
-        <b-container>
-          <b-row class="align-items-top" align-h="between">
-            <!-- Coluna da Esquerda -->
-            <b-col md="4" class="mb-4 mb-md-0">
-              <h2 class="mb-4 font-weight-bold">Ocorrências</h2>
-
-              <div class="d-flex align-items-center mb-4">
-                <img src="@/assets/perigo.png" alt="Alerta" class="alert-icon mr-3" />
-                <span class="display-1 font-weight-bold" style="font-size: 7rem;">45</span>
-              </div>
-
-              <div class="d-flex flex-column gap-4 status-cards mt-9" >
-                <div class="status-card open d-flex justify-content-between px-4 py-2">
-                  <span>Abertas</span>
-                  <span>13</span>
-                </div>
-                <div class="status-card analysis d-flex justify-content-between px-4 py-2">
-                  <span>Em Análise</span>
-                  <span>20</span>
-                </div>
-                <div class="status-card closed d-flex justify-content-between px-4 py-2">
-                  <span>Concluídas</span>
-                  <span>12</span>
-                </div>
-              </div>
-            </b-col>
-
-            <!-- Coluna do Mapa -->
-            <b-col md="6" class="text-center">
-              <img src="@/assets/mapatuga.png" alt="Mapa" class="img-fluid mapa-img" />
-            </b-col>
-          </b-row>
-        </b-container>
-      </section>
-      <!-- Mapa de Trânsito -->
-      <section class="traffic-monitoring py-5">
-        <maptraffic />
-      </section>
-      <!-- Footer -->
-      <footer>
-        <Footer />
-      </footer>
-    </div>
+      </b-container>
+    </section>
+    
+    <!-- Mapa de Trânsito -->
+    <section class="traffic-monitoring py-5">
+      <maptraffic />
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+      <Footer />
+    </footer>
+  </div>
 </template>
-  
+
 <script>
-  import Header from './Header.vue';
-  import maptraffic from './maptraffic.vue';
-  import Footer from './Footer.vue';
-  
-  export default {
-    name: "Home",
-    components: {
-      Header,
-      maptraffic,
-      Footer,
+import Header from './Header.vue';
+import maptraffic from './maptraffic.vue';
+import Footer from './Footer.vue';
+
+export default {
+  name: "Home",
+  components: {
+    Header,
+    maptraffic,
+    Footer,
+  },
+  data() {
+    return {
+      map: null,
+      markers: [],
+      totalOccurrences: 45,
+      openOccurrences: 13,
+      analysisOccurrences: 20,
+      closedOccurrences: 12,
+      occurrences: [
+        { lat: 38.7169, lng: -9.1399, title: "Estacionamento irregular", status: "open" },
+        { lat: 41.1496, lng: -8.6109, title: "Sinalização danificada", status: "analysis" },
+        { lat: 37.0194, lng: -7.9304, title: "Buraco na via", status: "closed" },
+        { lat: 40.2111, lng: -8.4291, title: "Semáforo avariado", status: "open" },
+        { lat: 39.7438, lng: -8.8070, title: "Obra na estrada", status: "analysis" }
+      ]
+    };
+  },
+  mounted() {
+    this.loadGoogleMaps();
+  },
+  methods: {
+    loadGoogleMaps() {
+      if (!window.google) {
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=visualization`;
+        script.defer = true;
+        script.async = true;
+        script.onload = this.initMap;
+        document.head.appendChild(script);
+      } else {
+        this.initMap();
+      }
     },
-  };
+    initMap() {
+      // Cria o mapa centrado em Portugal
+      this.map = new google.maps.Map(this.$refs.map, {
+        center: { lat: 39.3999, lng: -8.2245 }, // Centro de Portugal
+        zoom: 7,
+        styles: [
+          {
+            featureType: "poi",
+            stylers: [{ visibility: "off" }] // Esconde pontos de interesse
+          },
+          {
+            featureType: "transit",
+            elementType: "labels.icon",
+            stylers: [{ visibility: "off" }] // Esconde ícones de transporte
+          }
+        ]
+      });
+      
+      // Adiciona os marcadores das ocorrências
+      this.addOccurrenceMarkers();
+    },
+    addOccurrenceMarkers() {
+      // Limpa marcadores existentes
+      this.clearMarkers();
+      
+      // Adiciona cada ocorrência como um marcador no mapa
+      this.occurrences.forEach(occurrence => {
+        const marker = new google.maps.Marker({
+          position: { lat: occurrence.lat, lng: occurrence.lng },
+          map: this.map,
+          title: `${occurrence.title} (${this.getStatusText(occurrence.status)})`,
+          icon: this.getMarkerIcon(occurrence.status)
+        });
+        
+        this.markers.push(marker);
+      });
+    },
+    getMarkerIcon(status) {
+      // Retorna ícones diferentes baseados no status da ocorrência
+      const baseIcon = {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillOpacity: 1,
+        strokeWeight: 2,
+        scale: 8
+      };
+      
+      switch(status) {
+        case 'open':
+          return {
+            ...baseIcon,
+            fillColor: '#E74C3C', // Vermelho para abertas
+            strokeColor: '#FFFFFF'
+          };
+        case 'analysis':
+          return {
+            ...baseIcon,
+            fillColor: '#E67E22', // Laranja para em análise
+            strokeColor: '#FFFFFF'
+          };
+        case 'closed':
+          return {
+            ...baseIcon,
+            fillColor: '#2ECC71', // Verde para concluídas
+            strokeColor: '#FFFFFF'
+          };
+        default:
+          return {
+            ...baseIcon,
+            fillColor: '#3498DB', // Azul padrão
+            strokeColor: '#FFFFFF'
+          };
+      }
+    },
+    getStatusText(status) {
+      switch(status) {
+        case 'open': return 'Aberta';
+        case 'analysis': return 'Em Análise';
+        case 'closed': return 'Concluída';
+        default: return status;
+      }
+    },
+    clearMarkers() {
+      // Remove todos os marcadores do mapa
+      this.markers.forEach(marker => marker.setMap(null));
+      this.markers = [];
+    },
+    zoomIn() {
+      if (this.map) this.map.setZoom(this.map.getZoom() + 1);
+    },
+    zoomOut() {
+      if (this.map) this.map.setZoom(this.map.getZoom() - 1);
+    },
+    centerMap() {
+      if (this.map) {
+        // Centraliza no centro de Portugal
+        this.map.setCenter({ lat: 39.3999, lng: -8.2245 });
+        this.map.setZoom(7);
+      }
+    },
+    // Método para adicionar nova ocorrência (pode ser chamado por um form posteriormente)
+    addNewOccurrence(occurrence) {
+      this.occurrences.push(occurrence);
+      this.addOccurrenceMarkers();
+      this.updateCounters(occurrence.status);
+    },
+    updateCounters(status) {
+      this.totalOccurrences++;
+      switch(status) {
+        case 'open': this.openOccurrences++; break;
+        case 'analysis': this.analysisOccurrences++; break;
+        case 'closed': this.closedOccurrences++; break;
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
+
 .about-section {
   padding: 4rem 2rem;
   background: #f8f9fa;
@@ -213,23 +385,22 @@ h4 {
 
 .occurrences-section h2 {
   margin-bottom: 1rem;
-
 }
 
 .alert-container {
   display: flex;
   align-items: start;
-  margin-bottom: 2rem; /* Dá mais espaço entre o alerta e os cards */
+  margin-bottom: 2rem;
 }
 
 .alert-icon {
-  width: 110px; /* Ajusta o tamanho da imagem */
+  width: 110px;
   height: auto;
   margin-right: 25px;
 }
 
 .status-cards {
-  margin-top: 17rem; /* Ajuste a posição */
+  margin-top: 17rem;
   width: 100%;
 }
 
@@ -238,24 +409,87 @@ h4 {
   font-weight: bold;
   color: #000000;
   text-align: center;
-  padding: 12px 20px; /* Adiciona um espaçamento interno */
+  padding: 12px 20px;
   font-size: 1.2rem;
 }
 
 .open {
-  background-color: #E74C3C; /* Vermelho */
+  background-color: #E74C3C;
 }
 
 .analysis {
-  background-color: #E67E22; /* Laranja */
+  background-color: #E67E22;
 }
 
 .closed {
-  background-color: #2ECC71; /* Verde */
+  background-color: #2ECC71;
 }
 
-.mapa-img {
-  max-width: 70%;
-  height: auto;
+/* Novos estilos para o mapa interativo */
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.interactive-map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.control-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.1);
+}
+
+.traffic-monitoring {
+  background-color: #212122;
+  padding: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    height: 500px;
+  }
+  
+  .status-cards {
+    margin-top: 2rem;
+  }
+  
+  .alert-icon {
+    width: 80px;
+    margin-right: 15px;
+  }
+  
+  .display-1 {
+    font-size: 5rem !important;
+  }
 }
 </style>
