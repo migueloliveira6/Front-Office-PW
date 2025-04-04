@@ -6,7 +6,7 @@
     <!-- Navbar -->
     <nav class="navigation" role="navigation">
       <div class="nav-left">
-        <router-link to="/" custom v-slot="{ navigate, isActive }">
+        <router-link to="/" custom v-slot="{ navigate, isActive }" exact>
           <b-button 
             class="nav-button" 
             @click="navigate"
@@ -26,7 +26,7 @@
             @click="navigate"
             :class="{ 'active-nav-button': isActive }"
           >
-            Ocorrências/Auditorias
+            Ocorrências
           </b-button>
         </router-link>
       </div>

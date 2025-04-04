@@ -2,7 +2,7 @@
   <div>
     <Header />
     <div class="container mt-5 mb-5">
-      <h2 class="mb-4">Submissões de Ocorrências/Autorias</h2>
+      <h2 class="mb-4">Submissões de Ocorrências</h2>
       <div class="row">
         <!-- Coluna do Formulário -->
         <div class="col-md-6">
@@ -133,7 +133,8 @@
             </div>
 
             <!-- Termos e Condições -->
-            <div class="mb-4 form-check">
+            <!-- Termos e Condições -->
+            <div class="mb-4 form-check custom-form-check">
               <input
                 type="checkbox"
                 class="form-check-input"
@@ -161,7 +162,7 @@
             <div class="map-overview" ref="mapOverview"></div>
           </div>
           <!-- Campo de Localização imediatamente abaixo do mapa -->
-          <b-form-group label="Localização no Mapa*" class="mt-1">
+          <b-form-group label="Localização no Mapa" class="location-field">
             <b-form-input
               v-model="form.address"
               class="form-control"
@@ -407,15 +408,27 @@ textarea.form-control {
 /* Estilizando o mapa de visão geral (à direita) */
 .map-placeholder {
   width: 100%;
-  height: 100%;
+  height: 400px;
+  margin-top: 100px; /* Espaço acima do mapa */
 }
 
 .map-overview {
-  height: 400px;
+  height: 100%;
   width: 100%;
   border-radius: 8px;
   border: 2px solid #6c757d;
   background-color: #495057;
+}
+
+/* Ajuste para o campo de localização ficar colado ao mapa */
+.location-field {
+  margin-top: 0 !important;
+}
+
+.location-field .form-control {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
 }
 
 /* Estilizando os placeholders de fotografia */
@@ -505,6 +518,16 @@ textarea.form-control {
   font-size: 0.9rem;
 }
 
+/* Ajuste para aproximar o texto do checkbox */
+.custom-form-check .form-check-input {
+  margin-right: 5px; /* Reduz o espaço entre o checkbox e o texto */
+}
+
+.custom-form-check .form-check-label {
+  margin-left: 0; /* Remove qualquer margem à esquerda que o Bootstrap possa adicionar */
+  padding-left: 0; /* Remove qualquer padding à esquerda */
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
   .container {
@@ -525,8 +548,9 @@ textarea.form-control {
     overflow-x: auto;
   }
 
-  .map-overview {
+  .map-placeholder {
     height: 300px;
+    margin-top: 15px;
   }
 }
 </style>
