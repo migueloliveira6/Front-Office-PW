@@ -156,21 +156,20 @@ export default {
     return {
       map: null,
       markers: [],
-      totalOccurrences: 45,
-      openOccurrences: 13,
-      analysisOccurrences: 20,
-      closedOccurrences: 12,
-      occurrences: [
-        { lat: 38.7169, lng: -9.1399, title: "Estacionamento irregular", status: "open" },
-        { lat: 41.1496, lng: -8.6109, title: "Sinalização danificada", status: "analysis" },
-        { lat: 37.0194, lng: -7.9304, title: "Buraco na via", status: "closed" },
-        { lat: 40.2111, lng: -8.4291, title: "Semáforo avariado", status: "open" },
-        { lat: 39.7438, lng: -8.8070, title: "Obra na estrada", status: "analysis" }
-      ]
+      occurrences: [],
+      totalOccurrences: 0,
+      openOccurrences: 0,
+      analysisOccurrences: 0,
+      closedOccurrences: 0
     };
   },
   mounted() {
     this.loadGoogleMaps();
+    this.loadOccurrences();
+    window.addEventListener('occurrence-updated', this.loadOccurrences);
+  },
+  beforeDestroy() {
+    window.removeEventListener('occurrence-updated', this.loadOccurrences);
   },
   methods: {
     loadGoogleMaps() {
@@ -186,31 +185,28 @@ export default {
       }
     },
     initMap() {
-      // Cria o mapa centrado em Portugal
       this.map = new google.maps.Map(this.$refs.map, {
-        center: { lat: 39.3999, lng: -8.2245 }, // Centro de Portugal
+        center: { lat: 39.3999, lng: -8.2245 },
         zoom: 7,
         styles: [
-          {
-            featureType: "poi",
-            stylers: [{ visibility: "off" }] // Esconde pontos de interesse
-          },
-          {
-            featureType: "transit",
-            elementType: "labels.icon",
-            stylers: [{ visibility: "off" }] // Esconde ícones de transporte
-          }
+          { featureType: "poi", stylers: [{ visibility: "off" }] },
+          { featureType: "transit", elementType: "labels.icon", stylers: [{ visibility: "off" }] }
         ]
       });
-      
-      // Adiciona os marcadores das ocorrências
+      this.addOccurrenceMarkers();
+    },
+    loadOccurrences() {
+      const savedOccurrences = localStorage.getItem('occurrences');
+      this.occurrences = savedOccurrences ? JSON.parse(savedOccurrences) : [];
+      this.totalOccurrences = this.occurrences.length;
+      this.openOccurrences = this.occurrences.filter(o => o.status === 'open').length;
+      this.analysisOccurrences = this.occurrences.filter(o => o.status === 'analysis').length;
+      this.closedOccurrences = this.occurrences.filter(o => o.status === 'closed').length;
       this.addOccurrenceMarkers();
     },
     addOccurrenceMarkers() {
-      // Limpa marcadores existentes
+      if (!this.map) return;
       this.clearMarkers();
-      
-      // Adiciona cada ocorrência como um marcador no mapa
       this.occurrences.forEach(occurrence => {
         const marker = new google.maps.Marker({
           position: { lat: occurrence.lat, lng: occurrence.lng },
@@ -218,44 +214,21 @@ export default {
           title: `${occurrence.title} (${this.getStatusText(occurrence.status)})`,
           icon: this.getMarkerIcon(occurrence.status)
         });
-        
         this.markers.push(marker);
       });
     },
     getMarkerIcon(status) {
-      // Retorna ícones diferentes baseados no status da ocorrência
       const baseIcon = {
         path: google.maps.SymbolPath.CIRCLE,
         fillOpacity: 1,
         strokeWeight: 2,
         scale: 8
       };
-      
       switch(status) {
-        case 'open':
-          return {
-            ...baseIcon,
-            fillColor: '#E74C3C', // Vermelho para abertas
-            strokeColor: '#FFFFFF'
-          };
-        case 'analysis':
-          return {
-            ...baseIcon,
-            fillColor: '#E67E22', // Laranja para em análise
-            strokeColor: '#FFFFFF'
-          };
-        case 'closed':
-          return {
-            ...baseIcon,
-            fillColor: '#2ECC71', // Verde para concluídas
-            strokeColor: '#FFFFFF'
-          };
-        default:
-          return {
-            ...baseIcon,
-            fillColor: '#3498DB', // Azul padrão
-            strokeColor: '#FFFFFF'
-          };
+        case 'open': return { ...baseIcon, fillColor: '#E74C3C', strokeColor: '#FFFFFF' };
+        case 'analysis': return { ...baseIcon, fillColor: '#E67E22', strokeColor: '#FFFFFF' };
+        case 'closed': return { ...baseIcon, fillColor: '#2ECC71', strokeColor: '#FFFFFF' };
+        default: return { ...baseIcon, fillColor: '#3498DB', strokeColor: '#FFFFFF' };
       }
     },
     getStatusText(status) {
@@ -267,7 +240,6 @@ export default {
       }
     },
     clearMarkers() {
-      // Remove todos os marcadores do mapa
       this.markers.forEach(marker => marker.setMap(null));
       this.markers = [];
     },
@@ -276,27 +248,6 @@ export default {
     },
     zoomOut() {
       if (this.map) this.map.setZoom(this.map.getZoom() - 1);
-    },
-    centerMap() {
-      if (this.map) {
-        // Centraliza no centro de Portugal
-        this.map.setCenter({ lat: 39.3999, lng: -8.2245 });
-        this.map.setZoom(7);
-      }
-    },
-    // Método para adicionar nova ocorrência (pode ser chamado por um form posteriormente)
-    addNewOccurrence(occurrence) {
-      this.occurrences.push(occurrence);
-      this.addOccurrenceMarkers();
-      this.updateCounters(occurrence.status);
-    },
-    updateCounters(status) {
-      this.totalOccurrences++;
-      switch(status) {
-        case 'open': this.openOccurrences++; break;
-        case 'analysis': this.analysisOccurrences++; break;
-        case 'closed': this.closedOccurrences++; break;
-      }
     }
   }
 };
