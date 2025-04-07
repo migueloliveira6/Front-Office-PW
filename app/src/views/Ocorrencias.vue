@@ -13,7 +13,7 @@
                 id="title"
                 v-model="form.title"
                 required
-                placeholder="Ex: Buraco na estrada"
+                placeholder="Ex: Veículo mal estacionado"
                 class="form-control"
               />
             </b-form-group>
@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-md-6">
                   <input
-                    type="text"
+                    type="telphone"
                     class="form-control mb-2"
                     placeholder="Contacto"
                     v-model="form.contact"
@@ -208,10 +208,10 @@ export default {
         termsAccepted: false,
       },
       occurrenceTypes: [
-        { value: 'road', text: 'Problema na via' },
-        { value: 'parking', text: 'Estacionamento irregular' },
-        { value: 'signal', text: 'Sinalização danificada' },
-        { value: 'other', text: 'Outros' },
+        { value: 'bad_parking', text: 'Veículo mal-estacionado' },
+        { value: 'reserved_spots', text: 'Ocupação indevida de lugares reservados' },
+        { value: 'congestion', text: 'Congestionamento' },
+        { value: 'other', text: 'Outros' }
       ],
       overviewMap: null,
       overviewMarker: null,
