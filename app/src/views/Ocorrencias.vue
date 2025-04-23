@@ -409,7 +409,7 @@ textarea.form-control {
 .map-placeholder {
   width: 100%;
   height: 400px;
-  margin-top: 100px; /* Espaço acima do mapa */
+  margin-top: 24px; /* Espaço acima do mapa */
 }
 
 .map-overview {
@@ -422,7 +422,7 @@ textarea.form-control {
 
 /* Ajuste para o campo de localização ficar colado ao mapa */
 .location-field {
-  margin-top: 0 !important;
+  margin-top: 10px !important;
 }
 
 .location-field .form-control {
