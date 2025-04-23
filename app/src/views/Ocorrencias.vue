@@ -8,7 +8,7 @@
         <div class="col-md-6">
           <b-form @submit.prevent="submitOccurrence" class="form-card">
             <!-- Título -->
-            <b-form-group label="Título*" label-for="title" class="mb-4">
+            <b-form-group label="Título*" label-for="title" class="mb-4 text-start">
               <b-form-input
                 id="title"
                 v-model="form.title"
@@ -19,7 +19,7 @@
             </b-form-group>
 
             <!-- Tipo de Ocorrência -->
-            <b-form-group label="Tipo de Ocorrência*" class="mb-4">
+            <b-form-group label="Tipo de Ocorrência*" class="mb-4 text-start">
               <b-form-select
                 v-model="form.type"
                 :options="occurrenceTypes"
@@ -29,7 +29,7 @@
             </b-form-group>
 
             <!-- Descrição -->
-            <b-form-group label="Descrição*" class="mb-4">
+            <b-form-group label="Descrição*" class="mb-4 text-start">
               <b-form-textarea
                 v-model="form.description"
                 rows="4"
@@ -40,7 +40,7 @@
             </b-form-group>
 
             <!-- Fotografias -->
-            <div class="mb-4">
+            <div class="mb-4 text-start">
               <label class="form-label">Fotografias</label>
               <div class="photo-container d-flex justify-content-start gap-3">
                 <div
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Ficheiros -->
-            <div class="mb-4">
+            <div class="mb-4 text-start">
               <label for="ficheiros" class="form-label">Ficheiros (máx: 5)</label>
               <div class="d-flex align-items-center">
                 <button type="button" class="btn btn-custom-file me-2" @click="$refs.fileInput.click()">
@@ -94,7 +94,7 @@
             </div>
 
             <!-- Dados Pessoais -->
-            <div class="mb-4">
+            <div class="mb-4 text-start">
               <label class="form-label">Dados Pessoais</label>
               <div class="row">
                 <div class="col-md-6">
