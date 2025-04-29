@@ -352,7 +352,7 @@ export default {
       window.dispatchEvent(new CustomEvent('occurrence-updated'));
 
       // Redirecionar para home
-      this.$router.push('/');
+      this.$router.push('/#ocorrencias');
 
       // Feedback ao usuário
       this.$bvToast.toast('Ocorrência registada com sucesso!', {

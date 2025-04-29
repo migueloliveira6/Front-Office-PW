@@ -8,17 +8,17 @@
       <b-row class="footer-content text-start">
         <b-col md="4" class="mb-4 footer-column">
           <h5 class="footer-subtitle">Contacto</h5>
-          <p>Email: contacto@eyeseverywhere.com</p>
+          <p><a href="mailto:contacto@eyeseverywhere.com">Email: contacto@eyeseverywhere.com</a></p>
           <p>Telefone: +351 123 456 789</p>
           <p>Localização: Guimarães, Portugal</p>
         </b-col>
   
         <b-col md="4" class="mb-4 footer-column">
           <h5 class="footer-subtitle">Links Úteis</h5>
-           <p><a href="#sobre-nos" class="footer-link">Sobre nós</a></p>
-           <p><a href="#indicadores" class="footer-link">Indicadores</a></p>
-           <p><a href="#ocorrencias" class="footer-link">Ocorrências</a></p>
-           <p><a href="#transito" class="footer-link">Trânsito</a></p>
+           <p><a href="/#sobre-nos" class="footer-link">Sobre nós</a></p>
+           <p><a href="/#indicadores" class="footer-link">Indicadores</a></p>
+           <p><a href="/#ocorrencias" class="footer-link">Ocorrências</a></p>
+           <p><a href="/#transito" class="footer-link">Trânsito</a></p>
            </b-col>
   
         <b-col md="4" class="mb-4 footer-column">
@@ -51,7 +51,7 @@
           <a href="https://www.facebook.com" target="_blank">
             <img src="@/assets/facebook.png" alt="Facebook" class="social-icon" />
           </a>
-          <a href="https://twitter.com" target="_blank">
+          <a href="https://x.com" target="_blank">
             <img src="@/assets/twitter.png" alt="Twitter" class="social-icon" />
           </a>
         </div>
