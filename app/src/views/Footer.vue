@@ -15,11 +15,11 @@
   
         <b-col md="4" class="mb-4 footer-column">
           <h5 class="footer-subtitle">Links Úteis</h5>
-          <p>Sobre nós</p>
-          <p>Serviços</p>
-          <p>FAQ</p>
-          <p>Política de Privacidade</p>
-        </b-col>
+           <p><a href="#sobre-nos" class="footer-link">Sobre nós</a></p>
+           <p><a href="#indicadores" class="footer-link">Indicadores</a></p>
+           <p><a href="#ocorrencias" class="footer-link">Ocorrências</a></p>
+           <p><a href="#transito" class="footer-link">Trânsito</a></p>
+           </b-col>
   
         <b-col md="4" class="mb-4 footer-column">
           <h5 class="footer-subtitle">Newsletter</h5>
@@ -70,6 +70,15 @@ export default {
     background-color: #252525;
   }
   
+  .footer-link {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
   .footer-top h2 {
     padding-bottom: 10px;
     border-bottom: 1px solid #444;

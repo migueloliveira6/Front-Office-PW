@@ -2,7 +2,7 @@
   <div id="home">
     <Header />
     <!-- Sobre Nós -->
-    <section class="about-section">
+    <section id="sobre-nos" class="about-section">
       <h1 class="text-center mb-5">Sobre Nós</h1>
       
       <b-row class="justify-content-center">
@@ -33,7 +33,7 @@
     </section>
     
     <!-- Principais Indicadores da EyesEverywhere -->
-    <section class="metrics-section">
+    <section id="indicadores" class="metrics-section">
       <h2 class="text-center mb-5">Principais Indicadores da EyesEverywhere</h2>
       
       <b-row class="justify-content-center">
@@ -72,7 +72,7 @@
     </section>
     
     <!-- Seção de Ocorrências com Mapa Interativo -->
-    <section class="occurrences-section py-5">
+    <section id="ocorrencias" class="occurrences-section py-5">
       <b-container>
         <b-row class="align-items-top" align-h="between">
           <!-- Coluna da Esquerda - Estatísticas -->
@@ -129,7 +129,7 @@
     </section>
     
     <!-- Mapa de Trânsito -->
-    <section class="traffic-monitoring py-5">
+    <section id="transito" class="traffic-monitoring py-5">
       <maptraffic />
     </section>
     
