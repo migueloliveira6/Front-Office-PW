@@ -74,9 +74,9 @@
     <!-- Seção de Ocorrências com Mapa Interativo -->
     <section id="ocorrencias" class="occurrences-section py-5">
       <b-container>
-        <b-row class="align-items-top" align-h="between">
+        <b-row class="align-items-center"> <!-- Alinha verticalmente no centro -->
           <!-- Coluna da Esquerda - Estatísticas -->
-          <b-col md="4" class="mb-4 mb-md-0">
+          <b-col md="5" class="mb-4 mb-md-0 mt-5"> <!-- Adiciona uma margem superior -->
             <h2 class="mb-4 font-weight-bold">Ocorrências</h2>
 
             <div class="d-flex align-items-center mb-4">
@@ -84,7 +84,7 @@
               <span class="display-1 font-weight-bold" style="font-size: 7rem;">{{ totalOccurrences }}</span>
             </div>
 
-            <div class="d-flex flex-column gap-4 status-cards mt-9">
+            <div class="d-flex flex-column gap-4 status-cards mt-5">
               <div class="status-card open d-flex justify-content-between px-4 py-2">
                 <span>Abertas</span>
                 <span>{{ openOccurrences }}</span>
@@ -101,23 +101,21 @@
           </b-col>
 
           <!-- Coluna do Mapa Interativo -->
-          <b-col md="7" class="text-center">
+          <b-col md="6" class="ml-md-4">
             <div class="map-container">
               <!-- Mapa Google Maps interativo -->
               <div ref="map" class="interactive-map"></div>
-              
+
               <!-- Controles do Mapa -->
               <div class="map-controls">
                 <button class="control-btn zoom-btn" @click="zoomIn" title="Aproximar">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Ícone de "+" (linha vertical + linha horizontal) -->
                     <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                 </button>
                 <button class="control-btn zoom-btn" @click="zoomOut" title="Afastar">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Ícone de "-" (apenas linha horizontal) -->
                     <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                 </button>
@@ -127,7 +125,6 @@
         </b-row>
       </b-container>
     </section>
-    
     <!-- Mapa de Trânsito -->
     <section id="transito" class="traffic-monitoring py-5">
       <maptraffic />
@@ -340,7 +337,7 @@ h4 {
 
 .alert-container {
   display: flex;
-  align-items: start;
+  align-items: center;
   margin-bottom: 2rem;
 }
 
@@ -379,11 +376,12 @@ h4 {
 /* Novos estilos para o mapa interativo */
 .map-container {
   position: relative;
-  width: 100%;
-  height: 700px;
+  width: 70%;
+  height: 590px;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
 }
 
 .interactive-map {
