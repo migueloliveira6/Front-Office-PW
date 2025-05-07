@@ -67,11 +67,12 @@ export default {
   
   <style scoped>
   .footer {
-    background-color: #252525;
+    background-color: #b38a61 ;
   }
   
   .footer-link {
-  color: white;
+  color: #2c3e50;
+  font-weight: bold;
   text-decoration: none;
 }
 
@@ -86,14 +87,15 @@ export default {
   
   .footer-column h5 {
     margin-bottom: 10px;
+    font-weight: bold;
   }
   
   .footer-subtitle {
-    color: #C49C74; /* Cor que já ajustaste */
+    color: #2c3e50; /* Cor que já ajustaste */
   }
   
   .footer-title {
-    color: #C49C74; /* Cor do Figma */
+    color: #2c3e50; /* Cor do Figma */
     font-size: 2rem;
   }
   
@@ -122,7 +124,7 @@ export default {
   
   /* Estilizando o botão "Inscrever-se" */
   .btn-inscrever {
-    background-color: #C49C74;
+    background-color: #2c3e50;
     color: white;
     border: none;
   }
@@ -138,5 +140,16 @@ export default {
     align-items: center;
     margin-top: 30px;
   }
+
+p {
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+a{
+  color:#2c3e50;
+  font-weight: bold;
+}
+
   </style>
   
