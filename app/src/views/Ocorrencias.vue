@@ -133,7 +133,6 @@
             </div>
 
             <!-- Termos e Condições -->
-            <!-- Termos e Condições -->
             <div class="mb-4 form-check custom-form-check">
               <input
                 type="checkbox"
@@ -157,11 +156,9 @@
 
         <!-- Coluna do Mapa -->
         <div class="col-md-6 d-flex flex-column">
-          <!-- Mapa de Visão Geral -->  
           <div class="map-placeholder">
             <div class="map-overview" ref="mapOverview"></div>
           </div>
-          <!-- Campo de Localização imediatamente abaixo do mapa -->
           <b-form-group label="Localização no Mapa" class="location-field">
             <b-form-input
               v-model="form.address"
@@ -180,6 +177,8 @@
 <script>
 import Footer from './Footer.vue';
 import Header from './Header.vue';
+import axios from 'axios';
+axios.defaults.baseURL = 'http://localhost:5000';
 
 export default {
   name: "Ocorrencias",
@@ -225,7 +224,6 @@ export default {
   },
   methods: {
     initMaps() {
-      // Mapa de visão geral (à direita)
       this.overviewMap = new google.maps.Map(this.$refs.mapOverview, {
         center: { lat: 39.3999, lng: -8.2245 },
         zoom: 6,
@@ -242,7 +240,6 @@ export default {
       this.form.lat = latLng.lat();
       this.form.lng = latLng.lng();
 
-      // Atualiza o marcador no mapa de visão geral
       if (!this.overviewMarker) {
         this.overviewMarker = new google.maps.Marker({
           map: this.overviewMap,
@@ -257,7 +254,6 @@ export default {
         this.overviewMarker.setPosition(latLng);
       }
 
-      // Centraliza o mapa de visão geral na localização selecionada
       this.overviewMap.setCenter(latLng);
       this.overviewMap.setZoom(12);
     },
@@ -282,8 +278,6 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.$set(this.form.photos, this.currentPhotoIndex, e.target.result);
-          // Salva as fotos no localStorage
-          localStorage.setItem('savedPhotos', JSON.stringify(this.form.photos));
         };
         reader.readAsDataURL(file);
       }
@@ -294,24 +288,18 @@ export default {
       if (input.files.length > 0) {
         this.form.files = Array.from(input.files);
         this.fileLabel = `${input.files.length} ficheiro(s) selecionado(s)`;
-        // Salva os nomes dos arquivos no localStorage
-        const fileNames = this.form.files.map(file => ({ name: file.name }));
-        localStorage.setItem('savedFiles', JSON.stringify(fileNames));
       } else {
         this.form.files = [];
         this.fileLabel = "Nenhum ficheiro selecionado";
-        localStorage.removeItem('savedFiles');
       }
     },
 
     loadSavedData() {
-      // Carrega fotos salvas
       const savedPhotos = localStorage.getItem('savedPhotos');
       if (savedPhotos) {
         this.form.photos = JSON.parse(savedPhotos);
       }
 
-      // Carrega ficheiros salvos
       const savedFiles = localStorage.getItem('savedFiles');
       if (savedFiles) {
         const fileNames = JSON.parse(savedFiles);
@@ -320,46 +308,73 @@ export default {
       }
     },
 
-    submitOccurrence() {
-      // Validação final
+    updateFileName(event) {
+      const input = event.target;
+      if (input.files.length > 0) {
+        this.form.files = Array.from(input.files);  // Armazena os arquivos na variável 'files'
+        this.fileLabel = `${input.files.length} ficheiro(s) selecionado(s)`;  // Atualiza o rótulo com a quantidade de arquivos
+      } else {
+        this.form.files = [];
+        this.fileLabel = "Nenhum ficheiro selecionado";
+      }
+    },
+
+    async submitOccurrence() {
       if (!this.form.lat || !this.form.lng) {
-        this.$bvToast.toast('Selecione uma localização no mapa', {
-          title: 'Erro',
-          variant: 'danger',
-          solid: true,
-        });
+        alert('Por favor, clique no mapa para selecionar uma localização.');
         return;
       }
 
-      // Gerar ID e timestamp
-      this.form.id = Date.now().toString();
-      this.form.createdAt = new Date().toISOString();
+      const formData = new FormData();
 
-      // Obter ocorrências existentes
-      const existing = JSON.parse(localStorage.getItem('occurrences')) || [];
+      formData.append('json_data', JSON.stringify({
+        nome: this.form.title,
+        tipo: this.form.type,
+        descricao: this.form.description,
+        dnome: this.form.fullName,
+        dnif: this.form.nif,
+        dcontacto: this.form.contact,
+        demail: this.form.email,
+        location: this.form.address,
+      }));
 
-      // Adicionar nova ocorrência
-      const updated = [...existing, this.form];
-
-      // Salvar no localStorage
-      localStorage.setItem('occurrences', JSON.stringify(updated));
-
-      // Limpar fotos e ficheiros do localStorage após submissão
-      localStorage.removeItem('savedPhotos');
-      localStorage.removeItem('savedFiles');
-
-      // Disparar evento global
-      window.dispatchEvent(new CustomEvent('occurrence-updated'));
-
-      // Redirecionar para home
-      this.$router.push('/#ocorrencias');
-
-      // Feedback ao usuário
-      this.$bvToast.toast('Ocorrência registada com sucesso!', {
-        title: 'Sucesso',
-        variant: 'success',
-        solid: true,
+      // Adiciona as fotos convertidas em Blob ao FormData
+      this.form.photos.forEach((photo, index) => {
+        if (photo && photo.startsWith('data:')) {
+          const blob = this.dataURLtoBlob(photo); // Função para converter dataURL para Blob
+          formData.append(`photo_${index}`, blob, `photo_${index}.jpg`);
+        }
       });
+
+      // Adiciona os arquivos ao FormData
+      this.form.files.forEach((file, index) => {
+        formData.append(`file_${index}`, file);
+      });
+
+      try {
+        const response = await axios.post('/auditoria/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        alert('Ocorrência registrada com sucesso!');
+        console.log(response.data);
+      } catch (error) {
+        console.error('Erro ao registrar ocorrência:', error);
+        alert('Erro ao registrar ocorrência');
+      }
+    },
+
+    // Função para converter Data URL para Blob
+    dataURLtoBlob(dataURL) {
+      const byteString = atob(dataURL.split(',')[1]);
+      const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+      const arrayBuffer = new ArrayBuffer(byteString.length);
+      const uint8Array = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < byteString.length; i++) {
+        uint8Array[i] = byteString.charCodeAt(i);
+      }
+      return new Blob([uint8Array], { type: mimeString });
     },
   },
 };

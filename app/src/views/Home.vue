@@ -141,6 +141,8 @@
 import Header from './Header.vue';
 import maptraffic from './maptraffic.vue';
 import Footer from './Footer.vue';
+import axios from 'axios';
+axios.defaults.baseURL = 'http://localhost:5000';
 
 export default {
   name: "Home",
@@ -162,17 +164,17 @@ export default {
   },
   mounted() {
     this.loadGoogleMaps();
-    this.loadOccurrences();
-    window.addEventListener('occurrence-updated', this.loadOccurrences);
+    this.loadOccurrences();  // Carregar as ocorrências da API
+    window.addEventListener('occurrence-updated', this.loadOccurrences);  // Atualiza as ocorrências quando um evento for disparado
   },
   beforeDestroy() {
-    window.removeEventListener('occurrence-updated', this.loadOccurrences);
+    window.removeEventListener('occurrence-updated', this.loadOccurrences);  // Remove o ouvinte de evento quando o componente for destruído
   },
   methods: {
     loadGoogleMaps() {
       if (!window.google) {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=visualization`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=visualization,geocoding`;  // Incluindo o Geocoding
         script.defer = true;
         script.async = true;
         script.onload = this.initMap;
@@ -181,6 +183,7 @@ export default {
         this.initMap();
       }
     },
+
     initMap() {
       this.map = new google.maps.Map(this.$refs.map, {
         center: { lat: 39.3999, lng: -8.2245 },
@@ -192,28 +195,54 @@ export default {
       });
       this.addOccurrenceMarkers();
     },
-    loadOccurrences() {
-      const savedOccurrences = localStorage.getItem('occurrences');
-      this.occurrences = savedOccurrences ? JSON.parse(savedOccurrences) : [];
-      this.totalOccurrences = this.occurrences.length;
-      this.openOccurrences = this.occurrences.filter(o => o.status === 'open').length;
-      this.analysisOccurrences = this.occurrences.filter(o => o.status === 'analysis').length;
-      this.closedOccurrences = this.occurrences.filter(o => o.status === 'closed').length;
-      this.addOccurrenceMarkers();
+
+    // Função modificada para buscar as ocorrências da API
+    async loadOccurrences() {
+      try {
+        const response = await axios.get('/auditoria/get'); // Faz a requisição para a API para pegar as ocorrências
+        this.occurrences = response.data; // Assume que a resposta da API seja um array de ocorrências
+        this.totalOccurrences = this.occurrences.length;
+
+        // Filtra as ocorrências de acordo com o status
+        this.openOccurrences = this.occurrences.filter(o => o.status === -1).length;  // Status 'Aberta' (-1)
+        this.analysisOccurrences = this.occurrences.filter(o => o.status === 0).length;  // Status 'Em Análise' (0)
+        this.closedOccurrences = this.occurrences.filter(o => o.status === 1).length;  // Status 'Concluída' (1)
+
+        // Atualiza os marcadores no mapa
+        this.addOccurrenceMarkers();
+      } catch (error) {
+        console.error('Erro ao carregar as ocorrências:', error);
+      }
     },
+
     addOccurrenceMarkers() {
       if (!this.map) return;
-      this.clearMarkers();
+      this.clearMarkers(); // Limpa os marcadores antigos
+
+      const geocoder = new google.maps.Geocoder(); // Instancia o geocodificador
+
       this.occurrences.forEach(occurrence => {
-        const marker = new google.maps.Marker({
-          position: { lat: occurrence.lat, lng: occurrence.lng },
-          map: this.map,
-          title: `${occurrence.title} (${this.getStatusText(occurrence.status)})`,
-          icon: this.getMarkerIcon(occurrence.status)
-        });
-        this.markers.push(marker);
+        if (occurrence.location) {
+          geocoder.geocode({ address: occurrence.location }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+              const latLng = results[0].geometry.location;
+
+              // Adiciona o marcador para a ocorrência
+              const marker = new google.maps.Marker({
+                position: latLng,
+                map: this.map,
+                title: `${occurrence.nome} (${this.getStatusText(occurrence.status)})`,
+                icon: this.getMarkerIcon(occurrence.status)
+              });
+              this.markers.push(marker); // Adiciona o marcador à lista de marcadores
+            } else {
+              console.error('Erro ao geocodificar o endereço: ', occurrence.location);
+            }
+          });
+        }
       });
     },
+
     getMarkerIcon(status) {
       const baseIcon = {
         path: google.maps.SymbolPath.CIRCLE,
@@ -222,27 +251,31 @@ export default {
         scale: 8
       };
       switch(status) {
-        case 'open': return { ...baseIcon, fillColor: '#E74C3C', strokeColor: '#FFFFFF' };
-        case 'analysis': return { ...baseIcon, fillColor: '#E67E22', strokeColor: '#FFFFFF' };
-        case 'closed': return { ...baseIcon, fillColor: '#2ECC71', strokeColor: '#FFFFFF' };
-        default: return { ...baseIcon, fillColor: '#3498DB', strokeColor: '#FFFFFF' };
+        case -1: return { ...baseIcon, fillColor: '#E74C3C', strokeColor: '#FFFFFF' };  // 'Aberta' (-1)
+        case 0: return { ...baseIcon, fillColor: '#E67E22', strokeColor: '#FFFFFF' };  // 'Em Análise' (0)
+        case 1: return { ...baseIcon, fillColor: '#2ECC71', strokeColor: '#FFFFFF' };  // 'Concluída' (1)
+        default: return { ...baseIcon, fillColor: '#3498DB', strokeColor: '#FFFFFF' };  // Outros
       }
     },
+
     getStatusText(status) {
       switch(status) {
-        case 'open': return 'Aberta';
-        case 'analysis': return 'Em Análise';
-        case 'closed': return 'Concluída';
+        case -1: return 'Aberta';
+        case 0: return 'Em Análise';
+        case 1: return 'Concluída';
         default: return status;
       }
     },
+
     clearMarkers() {
-      this.markers.forEach(marker => marker.setMap(null));
-      this.markers = [];
+      this.markers.forEach(marker => marker.setMap(null)); // Remove todos os marcadores do mapa
+      this.markers = []; // Limpa a lista de marcadores
     },
+
     zoomIn() {
       if (this.map) this.map.setZoom(this.map.getZoom() + 1);
     },
+
     zoomOut() {
       if (this.map) this.map.setZoom(this.map.getZoom() - 1);
     }
