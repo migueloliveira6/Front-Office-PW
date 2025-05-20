@@ -61,7 +61,7 @@
   
   <style scoped>
   .footer {
-    background-color: #252525;
+    background-color: #262525;
   }
   
   .footer-top h2 {
