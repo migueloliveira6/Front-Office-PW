@@ -226,7 +226,7 @@ export default {
     initMaps() {
       this.overviewMap = new google.maps.Map(this.$refs.mapOverview, {
         center: { lat: 39.3999, lng: -8.2245 },
-        zoom: 6,
+        zoom: 6.6,
         disableDefaultUI: true,
       });
 

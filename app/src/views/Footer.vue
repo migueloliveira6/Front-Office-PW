@@ -118,7 +118,7 @@ export default {
 }
 
 .footer-title {
-  color: #2c3e50; /* Cor do Figma */
+  color: #2c3e50; 
   font-size: 2rem;
 }
 
@@ -153,7 +153,7 @@ export default {
 }
 
 .btn-inscrever:hover {
-  background-color: #a58c5e;
+  background-color: #5a4f39;
 }
 
 /* Flexbox para garantir que o texto e os ícones ficam onde devem */
