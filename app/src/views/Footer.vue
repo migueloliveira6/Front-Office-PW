@@ -89,7 +89,6 @@ export default {
 </script>
 
 <style scoped>
-/* Mantive os teus estilos originais */
 .footer {
   background-color: #b38a61 ;
 }
@@ -115,7 +114,7 @@ export default {
 }
 
 .footer-subtitle {
-  color: #2c3e50; /* Cor que já ajustaste */
+  color: #2c3e50; 
 }
 
 .footer-title {
@@ -123,7 +122,7 @@ export default {
   font-size: 2rem;
 }
 
-/* Ícones sociais alinhados à direita */
+/* Ícones redes sociais alinhados à direita */
 .social-icons {
   display: flex;
   justify-content: flex-end;  /* Para alinhar à direita */
@@ -139,14 +138,14 @@ export default {
   height: 30px;
 }
 
-/* Estilizando o campo de email */
+/*  campo de email */
 .email-input {
   background-color: #979797;
   color: white;
   border: 1px solid #C49C74;
 }
 
-/* Estilizando o botão "Inscrever-se" */
+/*  botão "Inscrever-se" */
 .btn-inscrever {
   background-color: #2c3e50;
   color: white;
