@@ -95,7 +95,7 @@
 
             <!-- Dados Pessoais -->
             <div class="mb-4 text-start">
-              <label class="form-label">Dados Pessoais</label>
+              <label class="form-label">Dados Pessoais*</label>
               <div class="row">
                 <div class="col-md-6">
                   <input
@@ -142,7 +142,7 @@
                 required
               />
               <label class="form-check-label" for="termosCondicoes">
-                Li e aceito os termos e condições da Política de Privacidade
+                Li e aceito os termos e condições da Política de Privacidade*
               </label>
             </div>
 

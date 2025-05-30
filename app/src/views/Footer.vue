@@ -5,15 +5,15 @@
       <p>Monitorização Inteligente para um Transporte mais seguro e eficiente</p>
     </div>
 
-    <b-row class="footer-content text-start">
-      <b-col md="4" class="mb-4 footer-column">
+    <b-row class="footer-content text-start ps-5 pe-4">
+      <b-col md="4" class="mb-5 footer-column">
         <h5 class="footer-subtitle">Contacto</h5>
         <p><a href="mailto:contacto@eyeseverywhere.com">Email: contacto@eyeseverywhere.com</a></p>
         <p>Telefone: +351 123 456 789</p>
         <p>Localização: Guimarães, Portugal</p>
       </b-col>
 
-      <b-col md="4" class="mb-4 footer-column">
+      <b-col md="4" class="mb-5 footer-column ps-4">
         <h5 class="footer-subtitle">Links Úteis</h5>
         <p><a href="/#sobre-nos" class="footer-link">Sobre nós</a></p>
         <p><a href="/#indicadores" class="footer-link">Indicadores</a></p>
@@ -21,7 +21,7 @@
         <p><a href="/#transito" class="footer-link">Trânsito</a></p>
       </b-col>
 
-      <b-col md="4" class="mb-4 footer-column">
+      <b-col md="4" class="mb-5 footer-column ps-4">
         <h5 class="footer-subtitle">Newsletter</h5>
         <p>Receba as últimas novidades no seu email</p>
         <b-form-input
