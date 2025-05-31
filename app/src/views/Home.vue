@@ -41,7 +41,7 @@
         <b-col cols="6" md="3" class="mb-4">
           <div class="metric-card">
             <h4>Número de auditorias realizadas</h4>
-            <p class="metric-value">55</p>
+            <p class="metric-value">{{ totalOccurrences }}</p>
           </div>
         </b-col>
         
@@ -49,7 +49,7 @@
         <b-col cols="6" md="3" class="mb-4">
           <div class="metric-card">
             <h4>Ocorrências registadas e resolvidas</h4>
-            <p class="metric-value">45</p>
+            <p class="metric-value">{{ totalOccurrences }}</p>
           </div>
         </b-col>
         
@@ -204,9 +204,9 @@ export default {
         this.totalOccurrences = this.occurrences.length;
 
         // Filtra as ocorrências de acordo com o status
-        this.openOccurrences = this.occurrences.filter(o => o.status === -1).length;  // Status 'Aberta' (-1)
+        this.openOccurrences = this.occurrences.filter(o => o.status === 1).length;  // Status 'Aberta' (1)
         this.analysisOccurrences = this.occurrences.filter(o => o.status === 0).length;  // Status 'Em Análise' (0)
-        this.closedOccurrences = this.occurrences.filter(o => o.status === 1).length;  // Status 'Concluída' (1)
+        this.closedOccurrences = this.occurrences.filter(o => o.status === 2).length;  // Status 'Concluída' (2)
 
         // Atualiza os marcadores no mapa
         this.addOccurrenceMarkers();
@@ -251,18 +251,18 @@ export default {
         scale: 8
       };
       switch(status) {
-        case -1: return { ...baseIcon, fillColor: '#E74C3C', strokeColor: '#FFFFFF' };  // 'Aberta' (-1)
+        case 1: return { ...baseIcon, fillColor: '#E74C3C', strokeColor: '#FFFFFF' };  // 'Aberta' (1)
         case 0: return { ...baseIcon, fillColor: '#E67E22', strokeColor: '#FFFFFF' };  // 'Em Análise' (0)
-        case 1: return { ...baseIcon, fillColor: '#2ECC71', strokeColor: '#FFFFFF' };  // 'Concluída' (1)
+        case 2: return { ...baseIcon, fillColor: '#2ECC71', strokeColor: '#FFFFFF' };  // 'Concluída' (2)
         default: return { ...baseIcon, fillColor: '#3498DB', strokeColor: '#FFFFFF' };  // Outros
       }
     },
 
     getStatusText(status) {
       switch(status) {
-        case -1: return 'Aberta';
+        case 1: return 'Aberta';
         case 0: return 'Em Análise';
-        case 1: return 'Concluída';
+        case 2: return 'Concluída';
         default: return status;
       }
     },
@@ -294,13 +294,22 @@ export default {
   background: white;
   border-radius: 8px;
   padding: 2rem;
-  height: 100%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  height: 100%; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card p {
+  color: #555; /* Cor mais suave */
+  line-height: 1.5;
+  font-family: 'Anaheim', sans-serif;
+  font-size: 1.15rem;
+  animation: fadeIn 1.2s ease forwards;
 }
 
 h3 {
@@ -326,12 +335,15 @@ p {
 .metric-card {
   background: #C49C74;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   height: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   text-align: center;
   transition: all 0.3s ease;
-  border-top: 4px solid #000000;
+  border-top: 4px solid #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .metric-card:hover {
@@ -340,10 +352,16 @@ p {
 }
 
 .metric-value {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   color: #2c3e50;
-  margin: 0.5rem 0;
+  animation: fadeIn 1.2s ease forwards;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
 h2 {
@@ -381,7 +399,7 @@ h4 {
 }
 
 .status-cards {
-  margin-top: 17rem;
+  margin-top: 10rem;
   width: 100%;
 }
 
@@ -459,6 +477,7 @@ h4 {
 @media (max-width: 768px) {
   .map-container {
     height: 500px;
+    width: 100%;
   }
   
   .status-cards {
