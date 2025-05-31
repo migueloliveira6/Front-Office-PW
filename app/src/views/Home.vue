@@ -41,7 +41,7 @@
         <b-col cols="6" md="3" class="mb-4">
           <div class="metric-card">
             <h4>Número de auditorias realizadas</h4>
-            <p class="metric-value">55</p>
+            <p class="metric-value">{{ totalOccurrences }}</p>
           </div>
         </b-col>
         
