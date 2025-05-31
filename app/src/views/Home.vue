@@ -294,13 +294,22 @@ export default {
   background: white;
   border-radius: 8px;
   padding: 2rem;
-  height: 100%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  height: 100%; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card p {
+  color: #555; /* Cor mais suave */
+  line-height: 1.5;
+  font-family: 'Anaheim', sans-serif;
+  font-size: 1.15rem;
+  animation: fadeIn 1.2s ease forwards;
 }
 
 h3 {
@@ -326,12 +335,15 @@ p {
 .metric-card {
   background: #C49C74;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   height: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   text-align: center;
   transition: all 0.3s ease;
-  border-top: 4px solid #000000;
+  border-top: 4px solid #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .metric-card:hover {
@@ -340,10 +352,16 @@ p {
 }
 
 .metric-value {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   color: #2c3e50;
-  margin: 0.5rem 0;
+  animation: fadeIn 1.2s ease forwards;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
 h2 {
@@ -381,7 +399,7 @@ h4 {
 }
 
 .status-cards {
-  margin-top: 17rem;
+  margin-top: 10rem;
   width: 100%;
 }
 
@@ -459,6 +477,7 @@ h4 {
 @media (max-width: 768px) {
   .map-container {
     height: 500px;
+    width: 100%;
   }
   
   .status-cards {
