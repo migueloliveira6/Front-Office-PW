@@ -216,6 +216,8 @@ export default {
       overviewMarker: null,
       fileLabel: 'Nenhum ficheiro selecionado',
       currentPhotoIndex: null,
+      latitude:'',
+      longitude: '',
     };
   },
   mounted() {
@@ -246,14 +248,20 @@ export default {
           position: latLng,
           draggable: true,
         });
-
         this.overviewMarker.addListener('dragend', (e) => {
+          this.latitude = latLng.lat();
+          this.longitude = latLng.lat();
           this.geocodeLocation(e.latLng);
         });
       } else {
         this.overviewMarker.setPosition(latLng);
+          this.latitude = latLng.lat();
+          this.longitude = latLng.lat();
+          console.log(this.latitude, this.longitude)
       }
-
+      this.latitude = latLng.lat();
+      this.longitude = latLng.lng();
+      // console.log(this.longitude,this.latitude)
       this.overviewMap.setCenter(latLng);
       this.overviewMap.setZoom(12);
     },
@@ -336,6 +344,8 @@ export default {
         dcontacto: this.form.contact,
         demail: this.form.email,
         location: this.form.address,
+        lat: this.latitude,
+        lng: this.longitude
       }));
 
       // Adiciona as fotos convertidas em Blob ao FormData
