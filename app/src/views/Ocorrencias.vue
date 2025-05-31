@@ -369,12 +369,45 @@ export default {
         });
         alert('Ocorrência registrada com sucesso!');
         console.log(response.data);
+        this.resetForm();
       } catch (error) {
         console.error('Erro ao registrar ocorrência:', error);
         alert('Erro ao registrar ocorrência');
       }
     },
 
+    resetForm() {
+    this.form = {
+    title: '',
+    type: null,
+    description: '',
+    photos: Array(6).fill(null),
+    files: [],
+    fullName: '',
+    nif: '',
+    contact: '',
+    email: '',
+    address: '',
+    lat: null,
+    lng: null,
+    termsAccepted: false,
+    };
+  // Limpa os inputs file
+  if (this.$refs.fileInput) this.$refs.fileInput.value = null;
+  if (this.$refs.photoInput) this.$refs.photoInput.value = null;
+   // Limpa o mapa
+   // Limpa o marcador do mapa
+    if (this.overviewMarker) {
+      this.overviewMarker.setMap(null);
+      this.overviewMarker = null;
+    }
+    // Limpa o mapa
+    if (this.overviewMap) {
+      this.overviewMap.setCenter({ lat: 39.3999, lng: -8.2245 });
+      this.overviewMap.setZoom(6.6);
+    }
+  },
+  
     // Função para converter Data URL para Blob
     dataURLtoBlob(dataURL) {
       const byteString = atob(dataURL.split(',')[1]);

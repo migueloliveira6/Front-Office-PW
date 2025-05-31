@@ -49,7 +49,7 @@
         <b-col cols="6" md="3" class="mb-4">
           <div class="metric-card">
             <h4>Ocorrências registadas e resolvidas</h4>
-            <p class="metric-value">45</p>
+            <p class="metric-value">{{ totalOccurrences }}</p>
           </div>
         </b-col>
         
