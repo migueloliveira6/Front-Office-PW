@@ -204,9 +204,9 @@ export default {
         this.totalOccurrences = this.occurrences.length;
 
         // Filtra as ocorrências de acordo com o status
-        this.openOccurrences = this.occurrences.filter(o => o.status === -1).length;  // Status 'Aberta' (-1)
+        this.openOccurrences = this.occurrences.filter(o => o.status === 1).length;  // Status 'Aberta' (1)
         this.analysisOccurrences = this.occurrences.filter(o => o.status === 0).length;  // Status 'Em Análise' (0)
-        this.closedOccurrences = this.occurrences.filter(o => o.status === 1).length;  // Status 'Concluída' (1)
+        this.closedOccurrences = this.occurrences.filter(o => o.status === 2).length;  // Status 'Concluída' (2)
 
         // Atualiza os marcadores no mapa
         this.addOccurrenceMarkers();
@@ -251,18 +251,18 @@ export default {
         scale: 8
       };
       switch(status) {
-        case -1: return { ...baseIcon, fillColor: '#E74C3C', strokeColor: '#FFFFFF' };  // 'Aberta' (-1)
+        case 1: return { ...baseIcon, fillColor: '#E74C3C', strokeColor: '#FFFFFF' };  // 'Aberta' (1)
         case 0: return { ...baseIcon, fillColor: '#E67E22', strokeColor: '#FFFFFF' };  // 'Em Análise' (0)
-        case 1: return { ...baseIcon, fillColor: '#2ECC71', strokeColor: '#FFFFFF' };  // 'Concluída' (1)
+        case 2: return { ...baseIcon, fillColor: '#2ECC71', strokeColor: '#FFFFFF' };  // 'Concluída' (2)
         default: return { ...baseIcon, fillColor: '#3498DB', strokeColor: '#FFFFFF' };  // Outros
       }
     },
 
     getStatusText(status) {
       switch(status) {
-        case -1: return 'Aberta';
+        case 1: return 'Aberta';
         case 0: return 'Em Análise';
-        case 1: return 'Concluída';
+        case 2: return 'Concluída';
         default: return status;
       }
     },
